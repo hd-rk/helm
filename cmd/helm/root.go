@@ -114,6 +114,12 @@ func newRootCmd(actionConfig *action.Configuration, out io.Writer, args []string
 		SilenceUsage:           true,
 		Args:                   require.NoArgs,
 		BashCompletionFunction: bashCompletionFunc,
+		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+			if err := settings.NormalizeHomePath(); err != nil {
+				return err
+			}
+			return nil
+		},
 	}
 	flags := cmd.PersistentFlags()
 

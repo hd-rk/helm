@@ -65,6 +65,15 @@ func (s *EnvSettings) Init(fs *pflag.FlagSet) {
 	}
 }
 
+func (s *EnvSettings) NormalizeHomePath() error {
+	absPath, err := filepath.Abs(string(s.Home))
+	if err != nil {
+		return err
+	}
+	s.Home = helmpath.Home(absPath)
+	return nil
+}
+
 // PluginDirs is the path to the plugin directories.
 func (s EnvSettings) PluginDirs() string {
 	if d, ok := os.LookupEnv("HELM_PLUGIN"); ok {
